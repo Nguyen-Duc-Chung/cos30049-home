@@ -1,0 +1,201 @@
+
+.create__item{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h5.prev_item, .create__item h3{
+    color: #f4ebdc ;
+}
+
+form{
+    width: 85%;
+}
+
+.form__input input, .form__input textarea, .form__select input{
+    width: 100%;
+    padding: 10px 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid black;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #af9c9c;
+    transition: 0.1s;
+}
+
+.form__input input::placeholder,
+.form__input textarea::placeholder {
+    color: #000000 ;
+}
+
+.form__input{
+    margin-bottom: 15px;
+}
+
+.form__input label,.form__select label{
+    color: #f4ebdc ;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+::-webkit-calendar-picker-indicator{
+    filter: invert(1) ;
+    cursor: pointer;
+}
+
+/* On hover: Light white border */
+/* When the select is hovered, show a 2px solid white border */
+.form__input input:hover,.form__input textarea:hover  {
+    border: 1.5px solid rgba(255, 255, 255, 0.7); /* Slight white border */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Light white glow */
+}
+
+/* On focus: White border and soft white glow */
+.form__input input:focus ,.form__input textarea:focus {
+    border: 2px solid #ffffff !important; /* White border when clicked */
+    background-color: #c5b2b2;
+}
+
+
+/*//////////////// SELECT OPTION  ////////////////////*/
+
+.custom-dropdown  {
+    color: rgb(0, 0, 0) !important;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Change the background color of the select input box */
+.custom-select__control {
+    background-color: #af9c9c !important; 
+    border: none !important; /* Default none border */
+    transition: border-color 0.3s ease-in-out;
+    margin-bottom: 15px;
+}
+
+/* When the select is hovered, show a 2px solid white border */
+.custom-select__control:hover {
+    border: 1.5px solid white !important; /* White border on hover */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Subtle glow effect */
+    background-color: #c5b2b2 !important;
+    cursor: pointer;
+}
+
+/* Change the color of the placeholder text */
+.custom-select__placeholder {
+    color: #372a22!important; /* Dark Brown placeholder text , take in App.css*/
+}
+
+/* Change the dropdown menu background */
+.custom-select__menu {
+    background-color: #af9c9c !important; /* Adjust dropdown menu background */
+}
+
+/* Change the option background color */
+.custom-select__option {
+    background-color: #f7f3ef !important; /* Light blue background on hover */
+    color: black !important; /* Keep text black */
+}
+
+/* Change the option when hovering background color */
+.custom-select__option:hover {
+    background-color: #855f4a !important; /* Light blue background on hover */
+    color: #f6f3ee !important; /* Keep text black */
+}
+
+/* Change the color of the dropdown arrow */
+.custom-select__indicator {
+    color: rgb(20, 19, 19) !important; /* Change to your preferred color */
+}
+
+/* Change the color of the separator bar */
+.custom-select__indicator-separator {
+    background-color: rgb(20, 19, 19) !important; /* Default white separator */
+    width: 2px !important ;
+}
+
+/*//////////////// SELECT OPTION(BACKUP) ////////////////////*/
+/* select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    padding: 10px 10px;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #af9c9c;
+    border-radius: 5px;
+    background-image: url("../assets/images/arrow-down.png");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: 98% ;
+
+    outline: none;
+}
+select::-ms-expand{
+    display: none;
+}
+
+select option{
+    width: 100%;
+    background-color: #af9c9c;
+
+    font-weight: 600;
+    font-size: 17px;
+}
+.selected{
+    display: none;
+} */
+
+/*//////////////// ADD BUTTON ////////////////////*/
+.add-btn {
+    padding: 8px 25px;
+    background: white;
+    margin: auto;
+    width: 85% ;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn a {
+    text-decoration: none;
+    color: #493c34  ;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.add-btn i {
+    color: #493c34  ;
+    font-weight: 900;
+}
+
+.add-btn:hover{
+    background: #f3c87b  ;
+}
+
+.add-btn:hover a{
+    color: white;
+}
+
+.add-btn:hover i{
+    color: white;
+}
+/*//////////////////////////////////////*/
+
+@media only screen and (max-width:576px){
+    .create__item{
+        margin-top: 15px;
+    }
+}
