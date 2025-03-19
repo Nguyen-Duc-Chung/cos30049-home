@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CommonSection from '../components/section/Common-section/CommonSection';
 import { Container, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom"; 
@@ -177,6 +177,42 @@ function Create() {
         { value: "Used", label: "Used" }
     ];
 
+    // MODIFY - Add state to track wallet connection status
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    useEffect(() => {
+        // Function to check if the wallet is connected
+        async function checkWalletConnection() {
+            if (window.ethereum) {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const accounts = await provider.send("eth_accounts", []);
+                if (accounts.length > 0) {
+                    setIsWalletConnected(true); // Set wallet as connected
+                } else {
+                    setIsWalletConnected(false); // Set wallet as not connected
+                }
+            } else {
+                setIsWalletConnected(false); // If no Ethereum provider, set as not connected
+            }
+        }
+    
+        // Check wallet connection on mount
+        checkWalletConnection();
+    
+        // Listen for account changes in the wallet
+        if (window.ethereum) {
+            window.ethereum.on("accountsChanged", checkWalletConnection);
+        }
+    
+        // Cleanup listener when component unmounts
+        return () => {
+            if (window.ethereum) {
+                window.ethereum.removeListener("accountsChanged", checkWalletConnection);
+            }
+        };
+     }, []);
+  
+  
+
 
 
     return(
@@ -195,6 +231,9 @@ function Create() {
                         <Col lg='9' md='8' sm='6' >
                             <div className="create__item">
                                 <h3> Upload your Car to the marketplace </h3>
+                                <div className="alert">
+                                    {isWalletConnected ? "" : "Please connect to your wallet before uploading the Asset!"}
+                                </div>
 
                                 <form > {/* ✏️ Added form submit */}
                                     <div className="form__input">
@@ -277,6 +316,7 @@ function Create() {
                                     <button 
                                            onClick={listCar}
                                            className="add-btn d-flex align-items-center gap-2"
+                                           disabled={!isWalletConnected}
                                     >
                                         <i class="ri-shopping-bag-line" ></i> ADD
                                     </button>

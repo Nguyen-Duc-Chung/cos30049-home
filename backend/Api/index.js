@@ -101,23 +101,50 @@ app.post("/cars", upload.single("image_path"), async (req, res) => {
 });
 
 
-// Create.jsx - Execute Car Sale
-// This route is used in `Create.js` to update the MySQL database when an Car is bought and its ownership is transferred.
-app.post("/buy-car", (req, res) => {
+
+// app.post("/buy-car", (req, res) => {
+//     const { token_id, new_owner, price_paid } = req.body;
+//     if (!token_id || !new_owner || !price_paid) {
+//         return res.status(400).json({ success: false, message: "Missing required fields" });
+//     }
+
+//     db.query("SELECT * FROM car_table WHERE token_id = ?", [token_id], (err, data) => {
+
+//         // Update Car ownership and mark as sold
+//         db.query(
+//             "UPDATE car_table SET owner = ?, seller = ?, currently_listed = ? WHERE token_id = ?",
+//             [new_owner, new_owner, false, token_id],
+//             (updateErr) => {
+//                 if (updateErr) return res.status(500).json({ success: false, message: updateErr });
+//                 return res.json({ success: true, message: "Car purchased successfully!" });
+//             }
+//         );
+//     });
+// });
+// 
+
+// API Route: Handle car sale (for CarDetails.jsx) 🛒
+app.post("/buy-car", (req, res) => {   // 🔥
     const { token_id, new_owner, price_paid } = req.body;
     if (!token_id || !new_owner || !price_paid) {
         return res.status(400).json({ success: false, message: "Missing required fields" });
     }
-
+    // Update car ownership and mark as sold
     db.query("SELECT * FROM car_table WHERE token_id = ?", [token_id], (err, data) => {
-
-        // Update Car ownership and mark as sold
         db.query(
             "UPDATE car_table SET owner = ?, seller = ?, currently_listed = ? WHERE token_id = ?",
             [new_owner, new_owner, false, token_id],
             (updateErr) => {
                 if (updateErr) return res.status(500).json({ success: false, message: updateErr });
-                return res.json({ success: true, message: "Car purchased successfully!" });
+
+                // Insert transaction record into the transactions table 💥
+                const transactionQuery = `INSERT INTO transactions (token_id, buyer, seller, price, transaction_type)
+                                          VALUES (?, ?, ?, ?, ?)`;
+                db.query(transactionQuery, [token_id, new_owner, data[0].owner, price_paid, "Transfer"], (transErr) => {
+                    if (transErr) return res.status(500).json({ success: false, message: transErr });
+
+                    return res.json({ success: true, message: "Car purchased successfully!" });
+                });
             }
         );
     });
@@ -144,7 +171,15 @@ app.get("/my-cars/:walletAddress", (req, res) => {
     });
 });
 
-
+// API Route: Fetch transaction history by wallet address (for TransHistory.jsx) 📜
+app.get("/transactions", (req, res) => {   // 🧾
+    const { wallet_address } = req.query;
+    const query = `SELECT * FROM transactions WHERE buyer = ? OR seller = ?`;
+    db.query(query, [wallet_address, wallet_address], (err, data) => {
+        if (err) return res.status(500).json({ success: false, message: err });
+        return res.json(data);
+    });
+});
 
 
 // Starting the server and listening on port 8800

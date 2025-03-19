@@ -14,7 +14,7 @@ module.exports = {
       url: "http://127.0.0.1:7545", 
       // accounts: [ " 0x... ", ],
       accounts: {
-        mnemonic: " pride hour put obtain alarm nice erosion equip aerobic about style tomato ", 
+        mnemonic: " blood fantasy april girl glow cat garbage purity fashion hybrid give switch ", 
       },
       chainId: 1337 
     },

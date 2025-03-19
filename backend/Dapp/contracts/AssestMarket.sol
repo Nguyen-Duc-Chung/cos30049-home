@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract AssestMarket  is ERC721URIStorage {
+contract AssestMarket is ERC721URIStorage {
 
     address payable owner;
 
@@ -29,6 +29,15 @@ contract AssestMarket  is ERC721URIStorage {
     }
 
     mapping(uint256 => ListedToken) private idToListedToken;
+
+    // Event to track transactions
+    event CarTransaction(
+        uint256 tokenId,
+        address indexed buyer,
+        address indexed seller,
+        uint256 price,
+        string transactionType
+    );
 
     // 1 - Allows the contract owner to update the listing price
     function updateListPrice(uint256 _listPrice) public payable {
@@ -54,7 +63,6 @@ contract AssestMarket  is ERC721URIStorage {
     }
 
     // 2 - Mint a new Assest, list it for sale, and set its price
-
     function createToken(uint256 price) public payable returns (uint) {
         require(msg.value == listPrice, "Send enough ether to list");
         require(price > 0, "Price must be greater than zero");
@@ -74,8 +82,6 @@ contract AssestMarket  is ERC721URIStorage {
         return currentTokenId;
     }
 
-
-    
     function createListedToken(uint256 tokenId, uint256 price) public payable {
         require(msg.sender == ownerOf(tokenId), "You are not the owner of this Assest");
         require(price > 0, "Price must be greater than zero");
@@ -94,7 +100,6 @@ contract AssestMarket  is ERC721URIStorage {
         );
     }
 
-    
     // 4 - Retrieve all listed Assests
     function getAllAssest() public view returns (ListedToken[] memory) {
         uint assCount = _tokenIds.current();
@@ -162,9 +167,11 @@ contract AssestMarket  is ERC721URIStorage {
 
         // Send platform fee to the contract owner
         payable(owner).transfer(listPrice);
+
+        // Emit transaction event (Buyer and Seller get notified)
+        emit CarTransaction(tokenId, msg.sender, item.seller, item.price, "Received");
+        emit CarTransaction(tokenId, item.seller, msg.sender, item.price, "Transfer");
     }
-
-
 
     function cancelTrade(uint256 tokenId) public {
         ListedToken storage item = idToListedToken[tokenId];
@@ -177,6 +184,4 @@ contract AssestMarket  is ERC721URIStorage {
         // Mark as unlisted
         item.currentlyListed = false;
     }
-
-
 }
